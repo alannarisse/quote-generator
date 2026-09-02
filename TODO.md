@@ -18,7 +18,7 @@
 - [ ] Visit http://localhost:4200
 
 ### 2. Deploy (Later)
-- [ ] Deploy backend to Railway
+- [ ] Deploy backend to Railway https://quote-generator-production-7d34.up.railway.app/
 - [ ] Deploy frontend to Vercel
 - [ ] Update frontend's `environment.prod.ts` with Railway backend URL
 
