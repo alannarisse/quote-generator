@@ -1,0 +1,32 @@
+
+.app {
+  min-height: 100vh;
+}
+
+header {
+  background: white;
+  box-shadow: var(--shadow-sm);
+  padding: 1rem;
+  margin-bottom: 20px;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+}
+
+main {
+  padding-bottom: 40px;
+  max-width: 85%;
+  margin: auto;
+}
