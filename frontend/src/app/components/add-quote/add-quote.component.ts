@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, inject, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuoteService } from '../../services/quote.service';
@@ -9,44 +9,62 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
   selector: 'app-add-quote',
   standalone: true,
   imports: [CommonModule, FormsModule, PasswordModalComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <div class="add-quote-container">
       <h2>Add a Quote</h2>
-      <form (ngSubmit)="submit()" class="card">
-        <div class="form-group">
-          <label for="source">Source *</label>
-          <input id="source" type="text" [(ngModel)]="form.source_name" name="source_name" placeholder="Movie, TV show, comedian, etc." required />
-        </div>
-        <div class="form-group">
-          <label for="quote">Quote *</label>
-          <textarea id="quote" [(ngModel)]="form.quote_text" name="quote_text" placeholder="Enter the quote..." required></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="speaker1">Speaker 1</label><input id="speaker1" type="text" [(ngModel)]="form.speaker_1" name="speaker_1" placeholder="Who said it?" /></div>
-          <div class="form-group"><label for="speaker2">Speaker 2</label><input id="speaker2" type="text" [(ngModel)]="form.speaker_2" name="speaker_2" placeholder="Second speaker" /></div>
-          <div class="form-group"><label for="speaker3">Speaker 3</label><input id="speaker3" type="text" [(ngModel)]="form.speaker_3" name="speaker_3" placeholder="Third speaker" /></div>
-        </div>
-        <div class="form-group"><label for="contributor">Your Name</label><input id="contributor" type="text" [(ngModel)]="form.contributor" name="contributor" placeholder="Who's adding this quote?" /></div>
-        <div class="form-group"><label for="tags">Tags (comma-separated, max 8)</label><input id="tags" type="text" [(ngModel)]="tagsInput" name="tags" placeholder="comedy, classic, inspirational..." /></div>
-        <div class="form-group"><label for="notes">Notes</label><textarea id="notes" [(ngModel)]="form.notes" name="notes" placeholder="Any additional context..." rows="2"></textarea></div>
-        @if (error()) { <p class="error">{{ error() }}</p> }
-        @if (success()) { <p class="success">Quote added successfully!</p> }
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="reset()">Clear</button>
-          <button type="submit" class="btn-primary" [disabled]="submitting()">{{ submitting() ? 'Adding...' : 'Add Quote' }}</button>
-        </div>
-      </form>
+      <wa-card>
+        <form (ngSubmit)="submit()">
+          <wa-input label="Source *" [value]="form.source_name" (wa-input)="form.source_name = $any($event).target.value" placeholder="Movie, TV show, comedian, etc." required>
+            <wa-icon slot="prefix" name="film"></wa-icon>
+          </wa-input>
+
+          <wa-textarea label="Quote *" [value]="form.quote_text" (wa-input)="form.quote_text = $any($event).target.value" placeholder="Enter the quote..." rows="4" required resize="auto"></wa-textarea>
+
+          <div class="form-row">
+            <wa-input label="Speaker 1" [value]="form.speaker_1" (wa-input)="form.speaker_1 = $any($event).target.value" placeholder="Who said it?">
+              <wa-icon slot="prefix" name="user"></wa-icon>
+            </wa-input>
+            <wa-input label="Speaker 2" [value]="form.speaker_2" (wa-input)="form.speaker_2 = $any($event).target.value" placeholder="Second speaker"></wa-input>
+            <wa-input label="Speaker 3" [value]="form.speaker_3" (wa-input)="form.speaker_3 = $any($event).target.value" placeholder="Third speaker"></wa-input>
+          </div>
+
+          <wa-input label="Your Name" [value]="form.contributor" (wa-input)="form.contributor = $any($event).target.value" placeholder="Who's adding this quote?">
+            <wa-icon slot="prefix" name="pencil"></wa-icon>
+          </wa-input>
+
+          <wa-input label="Tags (comma-separated, max 8)" [value]="tagsInput" (wa-input)="tagsInput = $any($event).target.value" placeholder="comedy, classic, inspirational...">
+            <wa-icon slot="prefix" name="tags"></wa-icon>
+          </wa-input>
+
+          <wa-textarea label="Notes" [value]="form.notes" (wa-input)="form.notes = $any($event).target.value" placeholder="Any additional context..." rows="2" resize="auto"></wa-textarea>
+
+          @if (error()) { <wa-callout variant="danger">{{ error() }}</wa-callout> }
+          @if (success()) { <wa-callout variant="success">Quote added successfully!</wa-callout> }
+
+          <div class="form-actions">
+            <wa-button type="button" variant="neutral" (click)="reset()">
+              <wa-icon slot="prefix" name="xmark"></wa-icon>
+              Clear
+            </wa-button>
+            <wa-button type="submit" variant="brand" [disabled]="submitting()" [loading]="submitting()">
+              <wa-icon slot="prefix" name="plus"></wa-icon>
+              {{ submitting() ? 'Adding...' : 'Add Quote' }}
+            </wa-button>
+          </div>
+        </form>
+      </wa-card>
       @if (showPasswordModal()) { <app-password-modal (close)="showPasswordModal.set(false)" (authenticated)="onAuthenticated($event)" /> }
     </div>
   `,
   styles: [`
-    .add-quote-container { padding: 20px 0; max-width: 700px; }
+    .add-quote-container { padding: 20px 0; max-width: 700px; margin:auto;}
     h2 { margin-bottom: 20px; }
-    .form-group { margin-bottom: 16px; label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--color-brown); font-size: 0.9rem; } input, textarea { width: 100%; } }
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
-    .error { color: var(--color-error); margin-bottom: 16px; }
-    .success { color: var(--color-success); margin-bottom: 16px; }
-    .form-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    wa-card { display: block; }
+    wa-input, wa-textarea { display: block; margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 16px; wa-input { margin-bottom: 0; } }
+    wa-callout { margin-bottom: 16px; }
+    .form-actions { display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--wa-color-neutral-200); }
   `]
 })
 export class AddQuoteComponent {

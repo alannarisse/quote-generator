@@ -1,4 +1,4 @@
-# Quote Generator
+# Quote Keeper
 
 A web app to store and manage quotes from movies, TV shows, comedians, and other sources. Built for a weekly newsletter workflow.
 
@@ -39,7 +39,7 @@ npm run dev       # Start server on port 3000
 ```
 
 #### Adding quotes to the seed
-cd ~/Sites/quote-generator/backend
+cd ~/Sites/quote-keeper/backend
 ##### Export current database to JSON
 npm run db:export
 
@@ -101,7 +101,7 @@ Auth requires `x-app-password` header.
 ## Project Structure
 
 ```
-quote-generator/
+quote-keeper/
 ├── backend/
 │   ├── src/
 │   │   ├── db/

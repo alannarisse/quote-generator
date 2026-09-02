@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuoteService, Quote } from '../../services/quote.service';
 import { AuthService } from '../../services/auth.service';
@@ -8,19 +8,24 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
   selector: 'app-random-quote',
   standalone: true,
   imports: [CommonModule, PasswordModalComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <div class="random-quote-container">
       <div class="header">
         <h2>Random Quote</h2>
-        <button class="btn-primary" (click)="getRandomQuote()" [disabled]="loading()">
-          🎲 {{ quote() ? 'Another One' : 'Get Random Quote' }}
-        </button>
+        <wa-button variant="brand" (click)="getRandomQuote()" [disabled]="loading()">
+          <wa-icon slot="prefix" name="shuffle"></wa-icon>
+          {{ quote() ? 'Another One' : 'Get Random Quote' }}
+        </wa-button>
       </div>
 
       @if (loading()) {
-        <div class="card loading-card"><p>Finding a quote...</p></div>
+        <wa-card class="loading-card">
+          <wa-spinner></wa-spinner>
+          <p>Finding a quote...</p>
+        </wa-card>
       } @else if (quote()) {
-        <div class="card quote-card">
+        <wa-card class="quote-card">
           <p class="quote-text">{{ quote()!.quote_text }}</p>
           <div class="quote-source">
             <span class="source">— {{ quote()!.source_name }}</span>
@@ -28,25 +33,38 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
           </div>
           @if (quote()!.tags.length > 0) {
             <div class="tags">
-              @for (tag of quote()!.tags; track tag) { <span class="tag">{{ tag }}</span> }
+              @for (tag of quote()!.tags; track tag) { <wa-tag size="small">{{ tag }}</wa-tag> }
             </div>
           }
           <div class="actions">
-            <button class="btn-secondary" (click)="copyToClipboard()">📋 Copy</button>
-            <button class="btn-secondary" [class.active]="quote()!.next_up" (click)="toggleNextUp()">⭐ {{ quote()!.next_up ? 'Remove from Next Up' : 'Next Up' }}</button>
-            <button class="btn-secondary" (click)="markAsUsed()">✓ Mark as Used</button>
+            <wa-button variant="neutral" (click)="copyToClipboard()">
+              <wa-icon slot="prefix" name="clipboard"></wa-icon>
+              Copy
+            </wa-button>
+            <wa-button [variant]="quote()!.next_up ? 'brand' : 'neutral'" (click)="toggleNextUp()">
+              <wa-icon slot="prefix" name="star"></wa-icon>
+              {{ quote()!.next_up ? 'Remove from Next Up' : 'Next Up' }}
+            </wa-button>
+            <wa-button variant="neutral" (click)="markAsUsed()">
+              <wa-icon slot="prefix" name="check"></wa-icon>
+              Mark as Used
+            </wa-button>
           </div>
-        </div>
+        </wa-card>
       } @else if (error()) {
-        <div class="card error-card">
+        <wa-card class="error-card">
+          <wa-icon name="circle-xmark" style="font-size: 2rem; color: var(--wa-color-danger-600);"></wa-icon>
           <p>{{ error() }}</p>
-          <button class="btn-secondary" (click)="getRandomQuote()">Try Again</button>
-        </div>
+          <wa-button variant="neutral" (click)="getRandomQuote()">Try Again</wa-button>
+        </wa-card>
       } @else {
-        <div class="card empty-card"><p>Click the button to get a random unused quote!</p></div>
+        <wa-card class="empty-card">
+          <wa-icon name="lightbulb" style="font-size: 2rem; opacity: 0.5;"></wa-icon>
+          <p>Click the button to get a random unused quote!</p>
+        </wa-card>
       }
 
-      @if (copied()) { <div class="toast success">Copied to clipboard!</div> }
+      @if (copied()) { <wa-callout variant="success" class="toast-notification">Copied to clipboard!</wa-callout> }
       @if (showPasswordModal()) {
         <app-password-modal (close)="showPasswordModal.set(false)" (authenticated)="onAuthenticated($event)" />
       }
@@ -56,12 +74,15 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
     .random-quote-container { padding: 20px 0; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
     .quote-card { text-align: center; padding: 40px 32px; }
-    .quote-text { font-size: 1.4rem; max-width: 700px; margin: 0 auto 20px; }
+    .quote-text { font-size: 1.4rem; max-width: 700px; margin: 0 auto 20px; font-style: italic; &::before { content: '"'; } &::after { content: '"'; } }
     .quote-source { margin-bottom: 16px; .source { font-weight: 500; color: var(--color-brown); } .speaker { color: var(--color-text-light); margin-left: 6px; } }
-    .tags { margin-bottom: 24px; }
-    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; .active { background: var(--color-gold, #d4a537); border-color: var(--color-gold, #d4a537); color: white; } }
-    .loading-card, .empty-card, .error-card { text-align: center; padding: 40px; color: var(--color-text-light); }
-    .error-card { color: var(--color-error); button { margin-top: 16px; } }
+    .tags { margin-bottom: 24px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--wa-color-neutral-200); margin-top: 16px; }
+    .loading-card, .empty-card, .error-card { text-align: center; padding: 40px; color: var(--color-text-light); display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .error-card { color: var(--color-error); }
+    .toast-notification { position: fixed; bottom: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    wa-card { display: block; }
   `]
 })
 export class RandomQuoteComponent {

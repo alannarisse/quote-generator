@@ -1,19 +1,34 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <div class="app">
       <header>
         <div class="container">
-          <h1>Quote Generator</h1>
+          <h1>
+            <wa-icon name="quote-left" style="margin-right: 8px;"></wa-icon>
+            Quote Keeper
+          </h1>
           <nav>
-            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Random</a>
-            <a routerLink="/quotes" routerLinkActive="active">All Quotes</a>
-            <a routerLink="/add" routerLinkActive="active">Add Quote</a>
+            <wa-button-group>
+              <wa-button [variant]="isActive('/') ? 'brand' : 'neutral'" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <wa-icon slot="prefix" name="shuffle"></wa-icon>
+                Random
+              </wa-button>
+              <wa-button [variant]="isActive('/quotes') ? 'brand' : 'neutral'" routerLink="/quotes" routerLinkActive="active">
+                <wa-icon slot="prefix" name="list"></wa-icon>
+                All Quotes
+              </wa-button>
+              <wa-button [variant]="isActive('/add') ? 'brand' : 'neutral'" routerLink="/add" routerLinkActive="active">
+                <wa-icon slot="prefix" name="plus"></wa-icon>
+                Add Quote
+              </wa-button>
+            </wa-button-group>
           </nav>
         </div>
       </header>
@@ -27,7 +42,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     header {
       background: white;
       box-shadow: var(--shadow-sm);
-      padding: 16px 0;
+      padding: 1rem;
       margin-bottom: 20px;
 
       .container {
@@ -35,41 +50,31 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 1rem;
       }
 
       h1 {
         font-size: 1.5rem;
         margin: 0;
-      }
-
-      nav {
         display: flex;
-        gap: 8px;
-
-        a {
-          padding: 8px 16px;
-          border-radius: var(--radius-sm);
-          color: var(--color-text-light);
-          font-weight: 500;
-          transition: all 0.2s;
-
-          &:hover {
-            background: var(--color-sand);
-            color: var(--color-brown);
-          }
-
-          &.active {
-            background: var(--color-terracotta);
-            color: white;
-          }
-        }
+        align-items: center;
       }
     }
 
     main {
       padding-bottom: 40px;
+      max-width:85%;
+      margin:auto;
     }
   `]
 })
-export class AppComponent {}
+export class AppComponent {
+  private router = inject(Router);
+
+  isActive(path: string): boolean {
+    if (path === '/') {
+      return this.router.url === '/';
+    }
+    return this.router.url.startsWith(path);
+  }
+}

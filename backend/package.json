@@ -1,7 +1,7 @@
 {
-  "name": "quote-generator-api",
+  "name": "quote-keeper-api",
   "version": "1.0.0",
-  "description": "API for Quote Generator app",
+  "description": "API for Quote Keeper app",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

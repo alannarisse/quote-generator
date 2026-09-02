@@ -1,8 +1,8 @@
-# Quote Generator
+# Quote Keeper
 
 ## Prompt
 
-This is to create a quote generator app. This will be used for a weekly newsletter that constantly needs fresh quotes as part of the newsletter. This app will do the following:
+This is to create a quote keeper app. This will be used for a weekly newsletter that constantly needs fresh quotes as part of the newsletter. This app will do the following:
 - Keep a dataset of quotes from movies, tv shows and other sources
   - Dataset should include name of source, quotes from the source, the person(s) who said the quote (allow for 3), and a notes field for extra information
   - More than one quote can be stored for any given source

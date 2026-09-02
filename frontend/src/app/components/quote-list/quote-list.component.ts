@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuoteService, Quote, QuoteFilters } from '../../services/quote.service';
@@ -9,72 +9,95 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
   selector: 'app-quote-list',
   standalone: true,
   imports: [CommonModule, FormsModule, PasswordModalComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <div class="quote-list-container">
-      <div class="filters">
+      <wa-card class="filters">
         <div class="filter-row">
-          <input type="text" placeholder="Search by source..." [(ngModel)]="filters.source" (ngModelChange)="loadQuotes()" />
-          <input type="text" placeholder="Search by speaker..." [(ngModel)]="filters.speaker" (ngModelChange)="loadQuotes()" />
-          <select [(ngModel)]="filters.tag" (ngModelChange)="loadQuotes()">
-            <option value="">All tags</option>
-            @for (tag of tags(); track tag) { <option [value]="tag">{{ tag }}</option> }
-          </select>
+          <wa-input placeholder="Search by source..." [value]="filters.source || ''" (wa-input)="filters.source = $any($event).target.value; loadQuotes()">
+            <wa-icon slot="prefix" name="magnifying-glass"></wa-icon>
+          </wa-input>
+          <wa-input placeholder="Search by speaker..." [value]="filters.speaker || ''" (wa-input)="filters.speaker = $any($event).target.value; loadQuotes()">
+            <wa-icon slot="prefix" name="user"></wa-icon>
+          </wa-input>
+          <wa-select placeholder="All tags" [value]="filters.tag || ''" (wa-change)="filters.tag = $any($event).target.value; loadQuotes()">
+            <wa-option value="">All tags</wa-option>
+            @for (tag of tags(); track tag) { <wa-option [value]="tag">{{ tag }}</wa-option> }
+          </wa-select>
         </div>
         <div class="filter-row">
-          <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="filters.unused" (ngModelChange)="loadQuotes()" /> Show unused only
-          </label>
+          <wa-checkbox [checked]="filters.unused || false" (wa-change)="filters.unused = $any($event).target.checked; loadQuotes()">Show unused only</wa-checkbox>
           <div class="sort-controls">
             <span>Sort by:</span>
-            <select [(ngModel)]="filters.sort" (ngModelChange)="loadQuotes()">
-              <option value="created_at">Date Added</option>
-              <option value="source_name">Source</option>
-              <option value="speaker_1">Speaker</option>
-              <option value="tags">Tags</option>
-              <option value="next_up">Next Up</option>
-            </select>
-            <button class="btn-icon" (click)="toggleOrder()">{{ filters.order === 'asc' ? '↑' : '↓' }}</button>
+            <wa-select [value]="filters.sort || 'created_at'" (wa-change)="filters.sort = $any($event).target.value; loadQuotes()">
+              <wa-option value="created_at">Date Added</wa-option>
+              <wa-option value="source_name">Source</wa-option>
+              <wa-option value="speaker_1">Speaker</wa-option>
+              <wa-option value="tags">Tags</wa-option>
+              <wa-option value="next_up">Next Up</wa-option>
+            </wa-select>
+            <wa-button variant="text" size="small" (click)="toggleOrder()">
+              <wa-icon [name]="filters.order === 'asc' ? 'arrow-up' : 'arrow-down'"></wa-icon>
+            </wa-button>
           </div>
         </div>
+      </wa-card>
+
+      <div class="quote-count">
+        <wa-badge variant="neutral">{{ quotes().length }}</wa-badge>
+        quote{{ quotes().length !== 1 ? 's' : '' }}
       </div>
 
-      <div class="quote-count">{{ quotes().length }} quote{{ quotes().length !== 1 ? 's' : '' }}</div>
-
       @if (loading()) {
-        <div class="loading">Loading quotes...</div>
+        <div class="loading">
+          <wa-spinner></wa-spinner>
+          <span>Loading quotes...</span>
+        </div>
       } @else {
         <div class="quotes-grid">
           @for (quote of quotes(); track quote.id) {
-            <div class="card quote-item" [class.used]="quote.used_at" [class.next-up]="quote.next_up">
+            <wa-card class="quote-item" [class.used]="quote.used_at" [class.next-up]="quote.next_up">
               <p class="quote-text">{{ quote.quote_text }}</p>
               <div class="quote-source">
                 <span class="source">{{ quote.source_name }}</span>
                 @if (quote.speaker_1) { <span class="speaker">— {{ quote.speaker_1 }}</span> }
               </div>
               @if (quote.tags.length > 0) {
-                <div class="tags">@for (tag of quote.tags; track tag) { <span class="tag">{{ tag }}</span> }</div>
+                <div class="tags">@for (tag of quote.tags; track tag) { <wa-tag size="small">{{ tag }}</wa-tag> }</div>
               }
               <div class="quote-meta">
-                @if (quote.next_up) { <span class="badge-nextup">Next Up</span> }
-                @if (quote.used_at) { <span class="badge-used">Used</span> }
+                @if (quote.next_up) { <wa-badge variant="warning">Next Up</wa-badge> }
+                @if (quote.used_at) { <wa-badge variant="success">Used</wa-badge> }
                 @if (quote.contributor) { <span class="contributor">by {{ quote.contributor }}</span> }
               </div>
               <div class="quote-actions">
-                <button class="btn-icon" title="Copy" (click)="copyQuote(quote)">📋</button>
-                <button class="btn-icon" [class.active]="quote.next_up" [title]="quote.next_up ? 'Remove from Next Up' : 'Add to Next Up'" (click)="toggleNextUp(quote)">⭐</button>
-                @if (quote.used_at) {
-                  <button class="btn-icon" title="Mark as unused" (click)="toggleUsed(quote)">↩️</button>
-                } @else {
-                  <button class="btn-icon" title="Mark as used" (click)="toggleUsed(quote)">✓</button>
-                }
-                <button class="btn-icon delete" title="Delete" (click)="deleteQuote(quote)">🗑️</button>
+                <wa-tooltip content="Copy">
+                  <wa-button variant="text" size="small" (click)="copyQuote(quote)">
+                    <wa-icon name="clipboard"></wa-icon>
+                  </wa-button>
+                </wa-tooltip>
+                <wa-tooltip [content]="quote.next_up ? 'Remove from Next Up' : 'Add to Next Up'">
+                  <wa-button [variant]="quote.next_up ? 'brand' : 'text'" size="small" (click)="toggleNextUp(quote)">
+                    <wa-icon name="star"></wa-icon>
+                  </wa-button>
+                </wa-tooltip>
+                <wa-tooltip [content]="quote.used_at ? 'Mark as unused' : 'Mark as used'">
+                  <wa-button variant="text" size="small" (click)="toggleUsed(quote)">
+                    <wa-icon [name]="quote.used_at ? 'rotate-left' : 'check'"></wa-icon>
+                  </wa-button>
+                </wa-tooltip>
+                <wa-tooltip content="Delete">
+                  <wa-button variant="text" size="small" class="delete-btn" (click)="deleteQuote(quote)">
+                    <wa-icon name="trash"></wa-icon>
+                  </wa-button>
+                </wa-tooltip>
               </div>
-            </div>
+            </wa-card>
           }
         </div>
       }
 
-      @if (copied()) { <div class="toast success">Copied to clipboard!</div> }
+      @if (copied()) { <wa-callout variant="success" class="toast-notification">Copied to clipboard!</wa-callout> }
       @if (showPasswordModal()) {
         <app-password-modal (close)="showPasswordModal.set(false)" (authenticated)="onAuthenticated($event)" />
       }
@@ -82,20 +105,22 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
   `,
   styles: [`
     .quote-list-container { padding: 20px 0; }
-    .filters { background: white; padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-    .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; &:not(:last-child) { margin-bottom: 12px; } input[type="text"], select { flex: 1; min-width: 150px; } }
-    .checkbox-label { display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-text-light); input { width: auto; } }
-    .sort-controls { display: flex; align-items: center; gap: 8px; margin-left: auto; span { color: var(--color-text-light); font-size: 0.9rem; } select { min-width: 120px; } }
-    .quote-count { color: var(--color-text-light); font-size: 0.9rem; margin-bottom: 16px; }
-    .loading { text-align: center; padding: 40px; color: var(--color-text-light); }
+    .filters { margin-bottom: 16px; }
+    .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; &:not(:last-child) { margin-bottom: 12px; } wa-input, wa-select { flex: 1; min-width: 150px; } }
+    .sort-controls { display: flex; align-items: center; gap: 8px; margin-left: auto; span { color: var(--color-text-light); font-size: 0.9rem; } wa-select { min-width: 140px; } }
+    .quote-count { color: var(--color-text-light); font-size: 0.9rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .loading { text-align: center; padding: 40px; color: var(--color-text-light); display: flex; flex-direction: column; align-items: center; gap: 12px; }
     .quotes-grid { display: grid; gap: 16px; }
-    .quote-item { position: relative; &.used { opacity: 0.7; border-left: 3px solid var(--color-success); } &.next-up { border-left: 3px solid var(--color-gold, #d4a537); background: linear-gradient(to right, rgba(212, 165, 55, 0.05), transparent); } }
-    .quote-text { font-size: 1.1rem; margin-bottom: 12px; }
+    .quote-item { position: relative; &.used { opacity: 0.7; border-left: 3px solid var(--wa-color-success-600); } &.next-up { border-left: 3px solid var(--wa-color-warning-600); } }
+    .quote-text { font-size: 1.1rem; margin-bottom: 12px; font-style: italic; &::before { content: '"'; } &::after { content: '"'; } }
     .quote-source { margin-bottom: 8px; .source { font-weight: 500; color: var(--color-brown); } .speaker { color: var(--color-text-light); } }
-    .tags { margin-bottom: 12px; }
+    .tags { margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
     .quote-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; .contributor { font-size: 0.85rem; color: var(--color-text-light); } }
-    .quote-actions { display: flex; gap: 8px; border-top: 1px solid var(--color-sand); padding-top: 12px; margin-top: 8px; .delete:hover { color: var(--color-error); } .active { color: var(--color-gold, #d4a537); } }
-    .badge-nextup { background: var(--color-gold, #d4a537); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+    .quote-actions { display: flex; gap: 4px; border-top: 1px solid var(--wa-color-neutral-200); padding-top: 12px; margin-top: 8px; }
+    .delete-btn:hover { --wa-color-neutral-600: var(--wa-color-danger-600); }
+    .toast-notification { position: fixed; bottom: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    wa-card { display: block; }
   `]
 })
 export class QuoteListComponent implements OnInit {
