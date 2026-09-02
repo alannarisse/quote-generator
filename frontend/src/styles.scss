@@ -1,0 +1,87 @@
+:root {
+  --color-cream: #FDF8F3;
+  --color-warm-white: #FAF6F1;
+  --color-sand: #E8DFD5;
+  --color-terracotta: #C4775B;
+  --color-rust: #A65D3F;
+  --color-brown: #6B4C3A;
+  --color-dark-brown: #4A3428;
+  --color-text: #3D2E24;
+  --color-text-light: #7A6B60;
+  --color-success: #5D8B4A;
+  --color-error: #B84A4A;
+  --shadow-sm: 0 1px 2px rgba(74, 52, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(74, 52, 40, 0.1);
+  --shadow-lg: 0 8px 24px rgba(74, 52, 40, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-weight: 600; color: var(--color-dark-brown); }
+a { color: var(--color-terracotta); text-decoration: none; &:hover { color: var(--color-rust); } }
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  transition: all 0.2s ease;
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.btn-primary { background: var(--color-terracotta); color: white; &:hover:not(:disabled) { background: var(--color-rust); } }
+.btn-secondary { background: var(--color-sand); color: var(--color-brown); &:hover:not(:disabled) { background: darken(#E8DFD5, 5%); } }
+.btn-outline { background: transparent; border: 1px solid var(--color-sand); color: var(--color-brown); &:hover:not(:disabled) { background: var(--color-warm-white); } }
+.btn-icon { background: transparent; padding: 8px; color: var(--color-text-light); &:hover:not(:disabled) { color: var(--color-terracotta); background: var(--color-sand); } }
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 14px;
+  border: 1px solid var(--color-sand);
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  &:focus { outline: none; border-color: var(--color-terracotta); box-shadow: 0 0 0 3px rgba(196, 119, 91, 0.15); }
+  &::placeholder { color: var(--color-text-light); }
+}
+textarea { resize: vertical; min-height: 100px; }
+
+.card { background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 24px; }
+.tag { display: inline-block; background: var(--color-sand); color: var(--color-brown); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin: 2px; }
+.badge-used { background: var(--color-success); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+
+.toast {
+  position: fixed; bottom: 20px; right: 20px; padding: 14px 20px;
+  border-radius: var(--radius-sm); background: var(--color-dark-brown); color: white;
+  box-shadow: var(--shadow-lg); z-index: 1000; animation: slideIn 0.3s ease;
+  &.success { background: var(--color-success); }
+  &.error { background: var(--color-error); }
+}
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(61, 46, 36, 0.5);
+  display: flex; align-items: center; justify-content: center; z-index: 100; animation: fadeIn 0.2s ease;
+}
+.modal { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 28px; max-width: 400px; width: 90%; animation: scaleIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.quote-text { font-size: 1.25rem; font-style: italic; line-height: 1.7; color: var(--color-text); &::before { content: '"'; } &::after { content: '"'; } }
+.quote-source { color: var(--color-text-light); font-size: 0.95rem; margin-top: 8px; .speaker { font-weight: 500; color: var(--color-brown); } }
