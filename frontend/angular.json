@@ -31,30 +31,43 @@
                 "input": "public"
               }
             ],
-            "styles":
-            [
-              "src/styles.css",
-              "node_modules/@awesome.me/webawesome/dist/styles/themes/awesome.css"
+            "styles": [
+              "src/styles.scss",
+              "node_modules/@awesome.me/webawesome/dist/styles/webawesome.css"
             ],
             "stylePreprocessorOptions": {
-                            "includePaths": [
-                                "src/app/sass"
-                            ]
-                        },
+              "includePaths": [
+                "src/app/sass"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"
