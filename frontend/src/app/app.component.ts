@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 
 @Component({
@@ -6,42 +6,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  template: `
-    <div class="app">
-      <header>
-        <div class="container">
-          <h1>
-            <wa-icon name="quote-left" style="margin-right: 8px;"></wa-icon>
-            Quote Keeper
-          </h1>
-          <nav>
-            <wa-button-group>
-              <wa-button [variant]="isActive('/') ? 'brand' : 'neutral'" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <wa-icon slot="prefix" name="shuffle"></wa-icon>
-                Random
-              </wa-button>
-              <wa-button [variant]="isActive('/quotes') ? 'brand' : 'neutral'" routerLink="/quotes" routerLinkActive="active">
-                <wa-icon slot="prefix" name="list"></wa-icon>
-                All Quotes
-              </wa-button>
-              <wa-button [variant]="isActive('/add') ? 'brand' : 'neutral'" routerLink="/add" routerLinkActive="active">
-                <wa-icon slot="prefix" name="plus"></wa-icon>
-                Add Quote
-              </wa-button>
-            </wa-button-group>
-          </nav>
-        </div>
-      </header>
-      <main class="container">
-        <router-outlet />
-      </main>
-    </div>
-  `,
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   private router = inject(Router);
-
+  protected warningColor = signal('red');
   isActive(path: string): boolean {
     if (path === '/') {
       return this.router.url === '/';
