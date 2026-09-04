@@ -23,3 +23,28 @@ main {
   max-width: 65%;
   margin: auto;
 }
+footer {
+  color:var(--color-cream);
+  background: var(--color-dark-brown);
+  padding: 3rem;
+  max-width: 100%;
+  margin: auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  h2 {
+    font-size:1.2rem;
+    margin-bottom:1rem;
+  }
+  ul {
+    font-size:.8rem;
+    list-style-type:none;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-column-gap: 1.6rem;
+  }
+  a {
+    color:var(--color-cream);
+  }
+}
