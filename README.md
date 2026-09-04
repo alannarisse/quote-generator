@@ -33,14 +33,15 @@ cd backend
 npm install
 cp .env.example .env
 # Edit .env with your DATABASE_URL and APP_PASSWORD
-npm run db:init   # Create tables
+npm run db:test   # Test database connection & check quote count
+npm run db:init   # Create tables (if starting fresh)
 npm run db:seed   # Optional: load starter quotes
 npm run dev       # Start server on port 3000
 ```
 
 #### Adding quotes to the seed
 cd ~/Sites/quote-keeper/backend
-##### Export current database to JSON
+##### Export current railway database to JSON
 npm run db:export
 
 ##### Import quotes

@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+// ============================================================================
+// Web Awesome Design Token Overrides
+// ============================================================================
+// Web Awesome styles everything using CSS custom properties (--wa-*).
+// You can override tokens globally on :root or on scoped containers.
+
+:root {
+  // --- Legacy app variables for custom components ---
+  --color-cream: #{$color-cream};
+  --color-warm-white: #{$color-warm-white};
+  --color-sand: #{$color-sand};
+  --color-terracotta: #{$color-terracotta};
+  --color-rust: #{$color-rust};
+  --color-brown: #{$color-brown};
+  --color-dark-brown: #{$color-dark-brown};
+  --color-text: #{$color-text};
+  --color-text-light: #{$color-text-light};
+  --color-success: #{$color-success};
+  --color-error: #{$color-danger};
+  --shadow-sm: 0 1px 3px rgba(74, 52, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(74, 52, 40, 0.1);
+  --shadow-lg: 0 8px 24px rgba(74, 52, 40, 0.12);
+
+  // --- Web Awesome Brand Tokens ---
+  // Overrides variant="brand" on buttons, badges, tags, active states
+  --wa-color-brand-fill-loud: #{$color-terracotta};
+  --wa-color-brand-fill-loud-hover: #{$color-rust};
+  --wa-color-brand-fill-loud-active: #{$color-dark-brown};
+  --wa-color-brand-on-loud: #ffffff;
+  --wa-color-brand-border-normal: #{$color-terracotta};
+
+  // --- Web Awesome Surfaces & Borders ---
+  --wa-color-surface-default: #{$color-warm-white};
+  --wa-color-surface-raised: #ffffff;
+  --wa-color-surface-border: #{$color-sand};
+
+  // --- Web Awesome Typography & Scale ---
+  --wa-font-family-body: #{$font-sans};
+  --wa-border-radius-scale: 1.1; // Adjust global roundedness (e.g. 1.0 = default, 1.5 = rounder, 0 = sharp)
+  --wa-space-scale: 1.0;          // Adjust spacing scale
+}
+
+// Dark theme overrides (activated when <html class="wa-dark">)
+html.wa-dark {
+  --color-cream: #1e171e;
+  --color-warm-white: #281f28;
+  --color-sand: #2e383d;
+  --color-text: #f5ede6;
+  --color-text-light: #9aa9b3;
+  --wa-color-surface-default: #1c171e;
+  --wa-color-surface-raised: #261f28;
+  --wa-color-surface-border: #3d352e;
+  --wa-color-text-normal: #f5ede6;
+  --wa-color-text-quiet: #9ab3a2;
+}

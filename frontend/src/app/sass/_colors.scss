@@ -1,0 +1,175 @@
+$brand-light-bluish-grey: #f2f5fd;
+$brand-lightest-blue: #f8f8fa;
+$brand-lighter-blue: #dee2ee;
+$brand-active-blue: #49a4da;
+$brand-active-blue-hover: #336699;
+$brand-blue: #0071ce;
+$brand-darker-blue: #23408f;
+$brand-hover-blue: #002790;
+$brand-secondary-hover-blue: #C8CFE3;
+$brand-lightest-blue-background: $brand-lightest-blue;
+
+$brand-black: #000000;
+$brand-white: #ffffff;
+$brand-warn: #fa1616;
+$brand-warn-hover: #e60c0c;
+$brand-darker-warn: #9a261c;
+$brand-warn-light: #fed0d0;
+$spec-dark-gray: #060d21;
+$brand-lightest-grey: #e8e8ee;
+$brand-lighter-grey: #cfd1d9;
+$brand-light-grey: #9a9aa3;
+$brand-medium-grey: #5e5e5e;
+$brand-grey: #484848;
+$brand-dark-grey: #d3d8e0;
+$brand-dark-silver-grey: #8d8d90;
+$brand-darker-grey: #5f6272;
+$brand-grey-background: #e1e1e1;
+$brand-light-grey-background: #e5e5e5;
+$brand-dark-grey-border-grey: $brand-dark-grey;
+$brand-border-primary: $brand-dark-grey;
+$brand-dark-silver-grey-header-text: #868995;
+
+$brand-active-state-grey: #f0f0f0;
+
+$brand-inactive: $brand-dark-silver-grey;
+
+$brand-light-orange: #fee9d0;
+$brand-orange: #fa9016;
+$brand-darker-orange: #f08100;
+
+$brand-light-green: #e1e9d0;
+$brand-green: #00a95d;
+$brand-highlight: #ffffb3;
+
+$brand-darker-grey-text-grey: $brand-darker-grey;
+
+$drawer-background: #fcfdff;
+$table-background-grey: #f8faff;
+$table-header-background: #F7F7F8;
+$table-background-hover: #EDF6FB;
+
+$marketing-blue: #336699;
+$marketing-red: #b33431;
+$marketing-dark-red: #8a322b;
+$marketing-lighter-grey: #ebebeb;
+$marketing-light-grey: #999999;
+$marketing-dark-grey: #555555;
+$marketing-orange: #d77138;
+$marketing-dark-orange: #b44e15;
+
+$markup-magenta: #E8178A;
+
+$alert-green: #688f16;
+$alert-orange: #ffc061;
+$alert-light-orange: #FFF2DF;
+
+$system-blue: #698ff8;
+
+$ag-grid-row-highlight: #FEF1E3;
+
+$content-text-icons-body-primary: #18191D;
+$content-text-icons-body-secondary: #5F6272;
+$content-text-input-primary-disabled: #878995;
+
+$tag-background-resting: #F7F7F8;
+$tag-background-disabled: #DFE0E3;
+
+.brand-main-blue {
+    color: $brand-blue;
+}
+
+.moreLinkColor {
+    color:$system-blue;
+}
+
+.brand-darker-blue {
+    color: $brand-darker-blue;
+}
+
+.brand-grey {
+    color: $brand-grey;
+}
+
+.brand-light-grey {
+    color: $brand-light-grey;
+}
+
+.brand-darker-grey {
+    color: $brand-darker-grey;
+}
+
+.brand-black {
+    color: $brand-black;
+}
+
+.brand-green {
+    color: $brand-green;
+}
+
+.brand-red {
+    color: $brand-orange;
+}
+
+.brand-warn {
+    color: $brand-warn;
+}
+
+.brand-alert-orange {
+    color: $alert-orange;
+}
+
+.marketing-dark-grey {
+    color: $marketing-dark-grey;
+}
+
+.marketing-light-grey {
+    color: $marketing-light-grey;
+}
+
+.sub-text-grey {
+    color: #8d919a;
+    font-size: 14px;
+}
+
+
+/* Material Theme override to make it dark blue.  The color ranges aren't important for most of our components,
+ * which is why the colors are adhere to the Material theme, while the primary (700) color is our defined color.
+ * We still use Material components and the CDK when more flexible libraries won't give what we need. */
+$dark-primary-text: rgba($brand-black, 0.87);
+$dark-secondary-text: rgba($brand-black, 0.54);
+$light-primary-text: $brand-white;
+$light-secondary-text: rgba($brand-white, 0.7);
+
+$dark-blue-palette: (
+        50: #e7eaf4,
+        100: #c2c9e3,
+        200: #9aa7d0,
+        300: #7285be,
+        400: #546ab1,
+        500: #3351a4,
+        600: #2c499b,
+        700:$brand-darker-blue,
+        800:#1b3683 ,
+        900:#0c256d ,
+        A100: $brand-lightest-blue,
+        A200: $brand-lighter-blue,
+        A400: $system-blue,
+        A700: $brand-blue,
+        contrast: (
+            50: $dark-primary-text,
+            100: $dark-primary-text,
+            200: $dark-primary-text,
+            300: $dark-primary-text,
+            400: $dark-primary-text,
+            500: $light-primary-text,
+            600: $light-primary-text,
+            700: $light-primary-text,
+            800: $light-primary-text,
+            900: $light-primary-text,
+            A100: $dark-primary-text,
+            A200: $light-primary-text,
+            A400: $light-primary-text,
+            A700: $light-primary-text,
+        )
+    );

@@ -7,6 +7,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "db:init": "node src/db/init.js",
+    "db:test": "node src/db/test.js",
     "db:seed": "node src/db/seed.js",
     "db:export": "node src/db/export.js",
     "db:reseed": "node src/db/reseed.js",

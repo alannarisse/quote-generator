@@ -15,11 +15,11 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
       <h2>Add a Quote</h2>
       <wa-card>
         <form (ngSubmit)="submit()">
-          <wa-input label="Source *" [value]="form.source_name" (wa-input)="form.source_name = $any($event).target.value" placeholder="Movie, TV show, comedian, etc." required>
+          <wa-input label="Source" [value]="form.source_name" (wa-input)="form.source_name = $any($event).target.value" placeholder="Movie, TV show, comedian, etc." required>
             <wa-icon slot="prefix" name="film"></wa-icon>
           </wa-input>
 
-          <wa-textarea label="Quote *" [value]="form.quote_text" (wa-input)="form.quote_text = $any($event).target.value" placeholder="Enter the quote..." rows="4" required resize="auto"></wa-textarea>
+          <wa-textarea label="Quote" [value]="form.quote_text" (wa-input)="form.quote_text = $any($event).target.value" placeholder="Enter the quote..." rows="4" required resize="auto"></wa-textarea>
 
           <div class="form-row">
             <wa-input label="Speaker 1" [value]="form.speaker_1" (wa-input)="form.speaker_1 = $any($event).target.value" placeholder="Who said it?">
