@@ -16,10 +16,14 @@ wa-card {
 
 // Button customizations
 wa-button {
-
   &::part(base) {
     font-weight: 500;
     transition: all 0.2s ease;
+  }
+  &:focus-within::part(base){
+     border-color: rgba(117, 176, 88, 0.4); // #49A4DA (matches --wa-input-border-color-focus)
+    box-shadow: 0 0 0 3px rgba(121, 157, 103, 0.4);
+  outline: none;
   }
 }
 
@@ -33,32 +37,38 @@ wa-select {
   --wa-form-control-required-content: '*';
   --wa-form-control-required-content-color: var(--color-error);
   --wa-form-control-required-content-offset: 0.25em;
+
   &::part(base) {
     border-radius: var(--radius-sm, 6px);
   }
+
   &::part(form-control-label) {
     font-weight: 500;
     color: var(--color-dark-brown);
     margin-bottom: 4px;
   }
 }
-wa-input:focus-within::part(base), wa-select:focus-within::part(base),wa-checkbox:focus-within::part(base) {
-    border-color: rgba(117, 176, 88, 0.4);                  // #49A4DA (matches --wa-input-border-color-focus)
-    box-shadow: 0 0 0 3px rgba(121, 157, 103, 0.4);
-    outline: none;
+
+wa-input:focus-within::part(base),
+wa-select:focus-within::part(base),
+wa-checkbox:focus-within::part(base),
+wa-textarea:focus-within::part(base) {
+  border-color: rgba(117, 176, 88, 0.4); // #49A4DA (matches --wa-input-border-color-focus)
+  box-shadow: 0 0 0 3px rgba(121, 157, 103, 0.4);
+  outline: none;
 }
+
 wa-select {
-  &:focus-within::part(combobox){
-    border-color: rgba(117, 176, 88, 0.4);                  // #49A4DA (matches --wa-input-border-color-focus)
+  &:focus-within::part(combobox) {
+    border-color: rgba(117, 176, 88, 0.4); // #49A4DA (matches --wa-input-border-color-focus)
     box-shadow: 0 0 0 3px rgba(121, 157, 103, 0.4);
     outline: none;
   }
-
-
 }
-  wa-checkbox{
-    &:focus-within::part(checkbox){
-    border-color: rgba(117, 176, 88, 0.4);                  // #49A4DA (matches --wa-input-border-color-focus)
+
+wa-checkbox {
+  &:focus-within::part(checkbox) {
+    border-color: rgba(117, 176, 88, 0.4); // #49A4DA (matches --wa-input-border-color-focus)
     box-shadow: 0 0 0 3px rgba(121, 157, 103, 0.4);
     outline: none;
   }
@@ -70,6 +80,7 @@ wa-dialog {
     border-radius: var(--radius-lg, 16px);
     box-shadow: var(--shadow-lg);
   }
+
   &::part(title) {
     font-weight: 600;
     color: var(--color-dark-brown);
@@ -78,6 +89,10 @@ wa-dialog {
 
 // Tag styling
 wa-tag {
+  padding: 0.6rem;
+  font-weight: 600;
+  background: var(--color-light-bg);
+
   &::part(base) {
     border-radius: 20px;
     font-size: 0.8rem;

@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   template: `
     <wa-dialog label="Enter Password" open (wa-request-close)="close.emit()">
       <p class="modal-desc">Password required for this action</p>
-      <wa-input type="password" [value]="password" (wa-input)="password = $any($event).target.value" placeholder="Password" (keyup.enter)="submit()" autofocus style="width: 100%; margin-bottom: 12px;"></wa-input>
+      <wa-input type="password" [value]="password" (input)="password = $any($event).target.value" placeholder="Password" (keyup.enter)="submit()" autofocus style="width: 100%; margin-bottom: 12px;"></wa-input>
       @if (error) { <wa-callout variant="danger" size="small">{{ error }}</wa-callout> }
       <div slot="footer" class="modal-actions">
         <wa-button variant="neutral" (click)="close.emit()">Cancel</wa-button>

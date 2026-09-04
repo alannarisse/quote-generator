@@ -38,11 +38,20 @@ router.get('/', async (req, res) => {
       query += ' AND used_at IS NULL';
     }
 
-    const validSorts = ['source_name', 'speaker_1', 'created_at', 'used_at', 'next_up', 'tags'];
+    const validSorts = ['source_name', 'speaker_1', 'contributor', 'created_at', 'used_at', 'next_up', 'tags', 'random'];
     let sortColumn = validSorts.includes(sort) ? sort : 'created_at';
-    if (sortColumn === 'tags') sortColumn = 'array_to_string(tags, \',\')';
-    const sortOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
-    query += ` ORDER BY ${sortColumn} ${sortOrder}`;
+
+    if (sortColumn === 'random') {
+      query += ' ORDER BY RANDOM()';
+    } else {
+      if (sortColumn === 'tags') {
+        sortColumn = "array_to_string(tags, ',')";
+      } else if (sortColumn === 'source_name' || sortColumn === 'speaker_1' || sortColumn === 'contributor') {
+        sortColumn = `LOWER(COALESCE(${sortColumn}, ''))`;
+      }
+      const sortOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+      query += ` ORDER BY ${sortColumn} ${sortOrder}`;
+    }
 
     const result = await pool.query(query, params);
     res.json(result.rows);

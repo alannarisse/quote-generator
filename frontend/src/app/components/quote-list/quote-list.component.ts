@@ -14,31 +14,35 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
     <div class="quote-list-container">
       <wa-card class="filters">
         <div class="filter-row">
-          <wa-input placeholder="Search by source..." [value]="filters.source || ''" (wa-input)="filters.source = $any($event).target.value; loadQuotes()">
+          <wa-input placeholder="Search by source..." [value]="filters.source || ''" (input)="filters.source = $any($event).target.value; loadQuotes()">
             <wa-icon slot="prefix" name="magnifying-glass"></wa-icon>
           </wa-input>
-          <wa-input placeholder="Search by speaker..." [value]="filters.speaker || ''" (wa-input)="filters.speaker = $any($event).target.value; loadQuotes()">
+          <wa-input placeholder="Search by speaker..." [value]="filters.speaker || ''" (input)="filters.speaker = $any($event).target.value; loadQuotes()">
             <wa-icon slot="prefix" name="user"></wa-icon>
           </wa-input>
-          <wa-select placeholder="All tags" [value]="filters.tag || ''" (wa-change)="filters.tag = $any($event).target.value; loadQuotes()">
+          <wa-select placeholder="All tags" [value]="filters.tag || ''" (change)="filters.tag = $any($event).target.value; loadQuotes()">
             <wa-option value="">All tags</wa-option>
             @for (tag of tags(); track tag) { <wa-option [value]="tag">{{ tag }}</wa-option> }
           </wa-select>
         </div>
         <div class="filter-row">
-          <wa-checkbox [checked]="filters.unused || false" (wa-change)="filters.unused = $any($event).target.checked; loadQuotes()">Show unused only</wa-checkbox>
+          <wa-checkbox [checked]="filters.unused || false" (change)="filters.unused = $any($event).target.checked; loadQuotes()">Show unused only</wa-checkbox>
           <div class="sort-controls">
             <span>Sort by:</span>
-            <wa-select [value]="filters.sort || 'created_at'" (wa-change)="filters.sort = $any($event).target.value; loadQuotes()">
+            <wa-select [value]="filters.sort || 'created_at'" (change)="onSortChange($event)">
               <wa-option value="created_at">Date Added</wa-option>
               <wa-option value="source_name">Source</wa-option>
               <wa-option value="speaker_1">Speaker</wa-option>
+              <wa-option value="contributor">Contributor</wa-option>
               <wa-option value="tags">Tags</wa-option>
               <wa-option value="next_up">Next Up</wa-option>
+              <wa-option value="random">Random</wa-option>
             </wa-select>
-            <wa-button variant="text" size="small" (click)="toggleOrder()">
-              <wa-icon [name]="filters.order === 'asc' ? 'arrow-up' : 'arrow-down'"></wa-icon>
-            </wa-button>
+            <wa-tooltip [content]="filters.sort === 'random' ? 'Reshuffle' : (filters.order === 'asc' ? 'Sort Ascending' : 'Sort Descending')">
+              <wa-button variant="text" size="small" (click)="toggleOrder()">
+                <wa-icon [name]="filters.sort === 'random' ? 'shuffle' : (filters.order === 'asc' ? 'arrow-up' : 'arrow-down')"></wa-icon>
+              </wa-button>
+            </wa-tooltip>
           </div>
         </div>
       </wa-card>
@@ -146,7 +150,27 @@ export class QuoteListComponent implements OnInit {
   }
 
   loadTags() { this.quoteService.getTags().subscribe({ next: (tags) => this.tags.set(tags) }); }
-  toggleOrder() { this.filters.order = this.filters.order === 'asc' ? 'desc' : 'asc'; this.loadQuotes(); }
+
+  onSortChange(event: any) {
+    const newSort = typeof event === 'string' ? event : event?.target?.value;
+    if (!newSort) return;
+    this.filters.sort = newSort;
+    if (newSort === 'source_name' || newSort === 'speaker_1' || newSort === 'contributor') {
+      this.filters.order = 'asc';
+    } else if (newSort === 'created_at') {
+      this.filters.order = 'desc';
+    }
+    this.loadQuotes();
+  }
+
+  toggleOrder() {
+    if (this.filters.sort === 'random') {
+      this.loadQuotes();
+    } else {
+      this.filters.order = this.filters.order === 'asc' ? 'desc' : 'asc';
+      this.loadQuotes();
+    }
+  }
 
   copyQuote(quote: Quote) {
     const text = `"${quote.quote_text}" — ${quote.source_name}${quote.speaker_1 ? ` (${quote.speaker_1})` : ''}`;

@@ -15,29 +15,29 @@ import { PasswordModalComponent } from '../password-modal/password-modal.compone
       <h2>Add a Quote</h2>
       <wa-card>
         <form (ngSubmit)="submit()">
-          <wa-input label="Source" [value]="form.source_name" (wa-input)="form.source_name = $any($event).target.value" placeholder="Movie, TV show, comedian, etc." required>
+          <wa-input label="Source" [value]="form.source_name" (input)="form.source_name = $any($event).target.value" placeholder="Movie, TV show, comedian, etc." required>
             <wa-icon slot="prefix" name="film"></wa-icon>
           </wa-input>
 
-          <wa-textarea label="Quote" [value]="form.quote_text" (wa-input)="form.quote_text = $any($event).target.value" placeholder="Enter the quote..." rows="4" required resize="auto"></wa-textarea>
+          <wa-textarea label="Quote" [value]="form.quote_text" (input)="form.quote_text = $any($event).target.value" placeholder="Enter the quote..." rows="4" required resize="auto"></wa-textarea>
 
           <div class="form-row">
-            <wa-input label="Speaker 1" [value]="form.speaker_1" (wa-input)="form.speaker_1 = $any($event).target.value" placeholder="Who said it?">
+            <wa-input label="Speaker 1" [value]="form.speaker_1" (input)="form.speaker_1 = $any($event).target.value" placeholder="Who said it?">
               <wa-icon slot="prefix" name="user"></wa-icon>
             </wa-input>
-            <wa-input label="Speaker 2" [value]="form.speaker_2" (wa-input)="form.speaker_2 = $any($event).target.value" placeholder="Second speaker"></wa-input>
-            <wa-input label="Speaker 3" [value]="form.speaker_3" (wa-input)="form.speaker_3 = $any($event).target.value" placeholder="Third speaker"></wa-input>
+            <wa-input label="Speaker 2" [value]="form.speaker_2" (input)="form.speaker_2 = $any($event).target.value" placeholder="Second speaker"></wa-input>
+            <wa-input label="Speaker 3" [value]="form.speaker_3" (input)="form.speaker_3 = $any($event).target.value" placeholder="Third speaker"></wa-input>
           </div>
 
-          <wa-input label="Your Name" [value]="form.contributor" (wa-input)="form.contributor = $any($event).target.value" placeholder="Who's adding this quote?">
+          <wa-input label="Your Name" [value]="form.contributor" (input)="form.contributor = $any($event).target.value" placeholder="Who's adding this quote?">
             <wa-icon slot="prefix" name="pencil"></wa-icon>
           </wa-input>
 
-          <wa-input label="Tags (comma-separated, max 8)" [value]="tagsInput" (wa-input)="tagsInput = $any($event).target.value" placeholder="comedy, classic, inspirational...">
+          <wa-input label="Tags (comma-separated, max 8)" [value]="tagsInput" (input)="tagsInput = $any($event).target.value" placeholder="comedy, classic, inspirational...">
             <wa-icon slot="prefix" name="tags"></wa-icon>
           </wa-input>
 
-          <wa-textarea label="Notes" [value]="form.notes" (wa-input)="form.notes = $any($event).target.value" placeholder="Any additional context..." rows="2" resize="auto"></wa-textarea>
+          <wa-textarea label="Notes" [value]="form.notes" (input)="form.notes = $any($event).target.value" placeholder="Any additional context..." rows="2" resize="auto"></wa-textarea>
 
           @if (error()) { <wa-callout variant="danger">{{ error() }}</wa-callout> }
           @if (success()) { <wa-callout variant="success">Quote added successfully!</wa-callout> }
